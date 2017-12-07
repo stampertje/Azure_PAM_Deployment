@@ -68,7 +68,7 @@
     {
       "apiVersion": "2017-06-01",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "variables('nicName')",
+      "name": "[variables('nicName')]",
       "location": "[resourceGroup().location]",
       "tags": {
         "displayName": "NetworkInterface"
@@ -91,7 +91,7 @@
     {
       "apiVersion": "2017-03-30",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "parameters('vmName')",
+      "name": "[parameters('vmName')]",
       "location": "[resourceGroup().location]",
       "tags": {
         "displayName": "VirtualMachine"
@@ -104,7 +104,7 @@
           "vmSize": "[variables('vmSize')]"
         },
         "osProfile": {
-          "computerName": "parameters('vmName')",
+          "computerName": "[parameters('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },

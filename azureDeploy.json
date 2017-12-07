@@ -47,7 +47,7 @@
 
     "baseuri": {
       "type": "string",
-      "defaultvalue": "http://raw.github.io/"
+      "defaultvalue": "https://github.com/stampertje/Azure_Pam_Deployment"
     }
   },
 
@@ -72,7 +72,7 @@
       "properties": {
         "mode": "Incremental",
         "templatelink": {
-          "uri": "variables('vmtemplateuri')"
+          "uri": "[variables('vmtemplateuri')]"
         },
         "parameters": {
           "vmName": "[concat(variables('vmNamePrefixDC'),copyIndex())]"
@@ -90,7 +90,7 @@
       "properties": {
         "mode": "Incremental",
         "templatelink": {
-          "uri": "variables('vmtemplateuri')"
+          "uri": "[variables('vmtemplateuri')]"
         },
         "parameters": {
           "vmName": "[concat(variables('vmNamePrefixMim'),copyIndex())]"
