@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "value": "furryadmin"
+    },
+    "windowsOSVersion": {
+      "value": "2016-Datacenter"
+    },
+    "virtualNetworkName": {
+      "value": "Furry_Vnet"
+    },
+    "subnetname": {
+      "value": "Subnet-2"
+    },
+    "resgrp": {
+      "value": "RG_Infra_Network" 
+    }
+  }
+}

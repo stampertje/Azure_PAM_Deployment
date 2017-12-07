@@ -1,0 +1,101 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+
+
+  "parameters": {
+    "adminUsername": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Username for the Virtual Machine."
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Virtual Machine."
+      }
+    },
+    "windowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [
+        "2012-R2-Datacenter",
+        "2016-Datacenter"
+      ],
+      "metadata": {
+        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version. Allowed values: 2012-R2-Datacenter, 2016-Datacenter."
+      }
+    },
+    "numberOfInstances": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "resgrp": {
+      "type": "string"
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "This points to an existing vnet."
+      }
+    },
+    "subnetname": {
+      "type": "string"
+    },
+
+    "baseuri": {
+      "type": "string",
+      "defaultvalue": "http://raw.github.io/"
+    }
+  },
+
+
+  "variables": {
+    "vmtemplateuri": "[concat('baseuri','/linked/createVm.json')]",
+    "vmNamePrefixDC": "PrivDC",
+    "vmNamePrefixMim": "PrivMIM"
+  },
+
+
+
+  "resources": [
+    {
+      "apiVersion": "2017-05-10",
+      "name": "domainControllers",
+      "type": "Microsoft.Resources/deployments",
+      "copy": {
+        "name": "virtualMachineLoop",
+        "count": "[parameters('numberOfInstances')]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templatelink": {
+          "uri": "variables('vmtemplateuri')"
+        },
+        "parameters": {
+          "vmName": "[concat(variables('vmNamePrefixDC'),copyIndex())]"
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "mimServers",
+      "type": "Microsoft.Resources/deployments",
+      "copy": {
+        "name": "virtualMachineLoop",
+        "count": "[parameters('numberOfInstances')]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templatelink": {
+          "uri": "variables('vmtemplateuri')"
+        },
+        "parameters": {
+          "vmName": "[concat(variables('vmNamePrefixMim'),copyIndex())]"
+        }
+      }
+    }
+  ]
+}
