@@ -47,13 +47,13 @@
 
     "baseuri": {
       "type": "string",
-      "defaultvalue": "https://github.com/stampertje/Azure_Pam_Deployment"
+      "defaultvalue": "https://raw.githubusercontent.com/stampertje/Azure_Pam_Deployment/master"
     }
   },
 
 
   "variables": {
-    "vmtemplateuri": "[concat('baseuri','/linked/createVm.json')]",
+    "vmtemplateuri": "[concat(parameters('baseuri'),'/linked/createVm.json')]",
     "vmNamePrefixDC": "PrivDC",
     "vmNamePrefixMim": "PrivMIM"
   },
@@ -75,7 +75,27 @@
           "uri": "[variables('vmtemplateuri')]"
         },
         "parameters": {
-          "vmName": "[concat(variables('vmNamePrefixDC'),copyIndex())]"
+          "vmName": {
+            "value": "[concat(variables('vmNamePrefixDC'),copyIndex())]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "windowsOSVersion": {
+            "value": "[parameters('windowsOSVersion')]"
+          },
+          "virtualnetworkname": {
+            "value": "[parameters('virtualnetworkname')]"
+          },
+          "subnetname": {
+            "value": "[parameters('subnetname')]"
+          },
+          "resgrp": {
+            "value": "[parameters('resgrp')]"
+          }
         }
       }
     },
@@ -93,7 +113,27 @@
           "uri": "[variables('vmtemplateuri')]"
         },
         "parameters": {
-          "vmName": "[concat(variables('vmNamePrefixMim'),copyIndex())]"
+          "vmName": {
+            "value": "[concat(variables('vmNamePrefixMim'),copyIndex())]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "windowsOSVersion": {
+            "value": "[parameters('windowsOSVersion')]"
+          },
+          "virtualnetworkname": {
+            "value": "[parameters('virtualnetworkname')]"
+          },
+          "subnetname": {
+            "value": "[parameters('subnetname')]"
+          },
+          "resgrp": {
+            "value": "[parameters('resgrp')]"
+          }
         }
       }
     }

@@ -54,7 +54,7 @@
   "variables": {
     "imagePublisher": "MicrosoftWindowsServer",
     "imageOffer": "WindowsServer",
-    "vmSize": "Standard_D1_v4",
+    "vmSize": "Standard_D1_v2",
 
     "OSDiskName": "osdisk",
     "dataDiskName": "dataDisk",

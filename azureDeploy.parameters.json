@@ -15,7 +15,10 @@
       "value": "Subnet-2"
     },
     "resgrp": {
-      "value": "RG_Infra_Network" 
+      "value": "RG_Infra_Network"
+    },
+    "baseuri": {
+      "value": "https://raw.githubusercontent.com/stampertje/Azure_Pam_Deployment/master"
     }
   }
 }
