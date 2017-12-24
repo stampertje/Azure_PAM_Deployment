@@ -1,0 +1,153 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+
+
+  ////////////////////////////////////////////////////////////////////
+  ////    Parameters                                              ////
+  ////////////////////////////////////////////////////////////////////
+
+  "parameters": {
+    "adminUsername": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "Username for the Virtual Machine."
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Virtual Machine."
+      }
+    },
+    "windowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",
+      "allowedValues": [
+        "2012-R2-Datacenter",
+        "2016-Datacenter"
+      ],
+      "metadata": {
+        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version. Allowed values: 2012-R2-Datacenter, 2016-Datacenter."
+      }
+    },
+    "numberOfInstances": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "resgrp": {
+      "type": "string"
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "This points to an existing vnet."
+      }
+    },
+    "subnetname": {
+      "type": "string"
+    }
+  },
+
+
+  ////////////////////////////////////////////////////////////////////
+  ////    Variables                                               ////
+  ////////////////////////////////////////////////////////////////////
+
+  "variables": {
+    // Image version
+    "imagePublisher": "MicrosoftWindowsServer",
+    "imageOffer": "WindowsServer",
+    "vmSize": "Standard_D1_v4",
+
+    // VM Customization (DC)
+    "vmNamePrefix": "PrivDC",
+
+    // Disk information
+    "OSDiskName": "osdisk",
+    "dataDiskName": "dataDisk",
+
+    // Network Information
+    "vnetId": "[resourceId(parameters('resgrp'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetname'))]"
+  },
+
+
+  ////////////////////////////////////////////////////////////////////
+  ////    Resources                                               ////
+  ////////////////////////////////////////////////////////////////////
+
+  "resources": [
+    {
+      "apiVersion": "2017-06-01",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('vmNamePrefix'), copyindex(),'-','NIC')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "NetworkInterface"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+
+    {
+      "apiVersion": "2017-03-30",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('vmNamePrefix'), copyindex())]",
+      "copy": {
+        "name": "virtualMachineLoop",
+        "count": "[parameters('numberOfInstances')]"
+      },
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "VirtualMachine"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNamePrefix'), copyindex(),'-','NIC'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[variables('vmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[concat(variables('vmNamePrefix'), copyindex())]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[parameters('windowsOSVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNamePrefix'), copyindex(),'-','NIC'))]"
+            }
+          ]
+        }
+      },
+      "resources": [
+
+      ]
+    }
+  ]
+}

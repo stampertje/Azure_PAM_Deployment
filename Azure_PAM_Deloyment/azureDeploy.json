@@ -55,7 +55,9 @@
   "variables": {
     "vmtemplateuri": "[concat(parameters('baseuri'),'/linked/createVm.json')]",
     "vmNamePrefixDC": "PrivDC",
-    "vmNamePrefixMim": "PrivMIM"
+    "vmNamePrefixMim": "PrivMIM",
+    "vmNamePrefixSQL": "PrivSQL",
+    "vmNamePrefixSP": "PrivSP"
   },
 
 
@@ -115,6 +117,82 @@
         "parameters": {
           "vmName": {
             "value": "[concat(variables('vmNamePrefixMim'),copyIndex())]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "windowsOSVersion": {
+            "value": "[parameters('windowsOSVersion')]"
+          },
+          "virtualnetworkname": {
+            "value": "[parameters('virtualnetworkname')]"
+          },
+          "subnetname": {
+            "value": "[parameters('subnetname')]"
+          },
+          "resgrp": {
+            "value": "[parameters('resgrp')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "sqlServers",
+      "type": "Microsoft.Resources/deployments",
+      "copy": {
+        "name": "virtualMachineLoop",
+        "count": "[parameters('numberOfInstances')]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templatelink": {
+          "uri": "[variables('vmtemplateuri')]"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[concat(variables('vmNamePrefixSQL'),copyIndex())]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "windowsOSVersion": {
+            "value": "[parameters('windowsOSVersion')]"
+          },
+          "virtualnetworkname": {
+            "value": "[parameters('virtualnetworkname')]"
+          },
+          "subnetname": {
+            "value": "[parameters('subnetname')]"
+          },
+          "resgrp": {
+            "value": "[parameters('resgrp')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "2017-05-10",
+      "name": "SharePointServers",
+      "type": "Microsoft.Resources/deployments",
+      "copy": {
+        "name": "virtualMachineLoop",
+        "count": "[parameters('numberOfInstances')]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templatelink": {
+          "uri": "[variables('vmtemplateuri')]"
+        },
+        "parameters": {
+          "vmName": {
+            "value": "[concat(variables('vmNamePrefixSP'),copyIndex())]"
           },
           "adminUsername": {
             "value": "[parameters('adminUsername')]"

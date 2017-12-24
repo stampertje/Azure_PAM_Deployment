@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Azure_PAM_Deployment", "Azure_PAM_Deloyment\Azure_PAM_Deployment.deployproj", "{51B681BA-6AB5-4E76-B99B-CF0D01E036C9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51B681BA-6AB5-4E76-B99B-CF0D01E036C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51B681BA-6AB5-4E76-B99B-CF0D01E036C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51B681BA-6AB5-4E76-B99B-CF0D01E036C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51B681BA-6AB5-4E76-B99B-CF0D01E036C9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D0D255A-D0A6-49A1-855B-FFD71EFAEC02}
+	EndGlobalSection
+EndGlobal
